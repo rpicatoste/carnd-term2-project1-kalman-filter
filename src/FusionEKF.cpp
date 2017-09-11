@@ -12,7 +12,8 @@ using std::vector;
 /*
  * Constructor.
  */
-FusionEKF::FusionEKF() {
+FusionEKF::FusionEKF() 
+{
 	is_initialized_ = false;
 
 	previous_timestamp_ = 0;
@@ -45,7 +46,6 @@ FusionEKF::~FusionEKF() {}
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) 
 {
-
 
 	/*****************************************************************************
 	 *  Initialization
@@ -85,23 +85,17 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack)
 						dt_3/2*noise_ax, 0, 				dt_2*noise_ax, 		0,
 						0, 				 dt_3/2*noise_ay, 	0, 					dt_2*noise_ay;
 
-	
 	this->ekf_.Predict();
 
 	/*****************************************************************************
 	 *  Update
 	 ****************************************************************************/
 
-	/**
-   TODO:
-	 * Use the sensor type to perform the update step.
-	 * Update the state and covariance matrices.
-	 */
-
+	// Use the sensor type to perform the update step.
+	// Update the state and covariance matrices.
 	if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
 		// Radar updates		
 		
-		std::cout << "state:" << this->ekf_.x_.transpose() << std::endl; 
 		this->Hj_ = this->ekf_.CalculateJacobian( this->ekf_.x_ );
 		this->ekf_.R_ = this->R_radar_;
 		this->ekf_.H_ = this->Hj_;
@@ -151,7 +145,7 @@ void FusionEKF::FirstMeasurement(const MeasurementPackage &measurement_pack)
 			0, 0, 0, 1;
 			
 	MatrixXd Q_in(4,4);
-	F_in << 0, 0, 0, 0,
+	Q_in << 0, 0, 0, 0,
 			0, 0, 0, 0,
 			0, 0, 0, 0,
 			0, 0, 0, 0;
@@ -170,10 +164,18 @@ void FusionEKF::FirstMeasurement(const MeasurementPackage &measurement_pack)
 
 		ekf_.Init(x_in, P_in, F_in, this->H_laser_, this->R_laser_, Q_in);
 	}
+	else {
+		// Wrong sensor
+		assert(0);
+	}
 
 	previous_timestamp_ = measurement_pack.timestamp_;
 	
 	is_initialized_ = true;
 	
 	cout << "Kalman initialized, x = " << ekf_.x_.transpose() << endl;
+	
+	std::cout << "ekf_.F_:\n " << this->ekf_.F_ << std::endl; 
+	std::cout << "ekf_.P_:\n " << this->ekf_.P_ << std::endl; 
+	std::cout << "ekf_.Q_:\n " << this->ekf_.Q_ << std::endl; 
 }

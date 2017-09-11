@@ -1,13 +1,12 @@
 #include "kalman_filter.h"
 #include <iostream>
-#include "tools.h"
 
 #define PI (3.141592653589793)
-
 
 KalmanFilter::KalmanFilter() {}
 
 KalmanFilter::~KalmanFilter() {}
+
 
 void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
                         MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) 
@@ -127,7 +126,7 @@ float KalmanFilter::LimitAngle(float angle)
 
 MatrixXd KalmanFilter::CalculateJacobian(const VectorXd &state)
 {
-	MatrixXd Hj(4, 4);
+	MatrixXd Hj(3, 4);
 	
 	// recover state parameters
 	float px = state(0);
@@ -135,7 +134,6 @@ MatrixXd KalmanFilter::CalculateJacobian(const VectorXd &state)
 	float vx = state(2);
 	float vy = state(3);
 
-	std::cout << "state:" << state.transpose() << std::endl; 
 	//pre-compute a set of terms to avoid repeated calculation
 	float c1 = px*px+py*py;
 	float c2 = sqrt(c1);

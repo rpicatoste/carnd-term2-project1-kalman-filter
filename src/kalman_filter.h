@@ -75,7 +75,6 @@ public:
 
 	float LimitAngle(float angle);
 	
-	MatrixXd CalculateJacobian(const VectorXd &state);
 };
 
 #endif /* KALMAN_FILTER_H_ */

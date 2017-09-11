@@ -73,6 +73,7 @@ public:
 	VectorXd ConvertCartesianToRadar(const VectorXd &cartesian);
 	VectorXd ConvertRadarToCartesian(const VectorXd &radar_measurement);
 
+	// Helper functions to limit the angle to the proper range.
 	float LimitAngle(float angle);
 	
 };

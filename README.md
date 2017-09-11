@@ -1,5 +1,5 @@
-#**Self-Driving Car Nanodegree Program - Term 2** 
-##**Project 1 - Extended Kalman Filter** 
+# Self-Driving Car Nanodegree Program - Term 2
+## Project 1 - Extended Kalman Filter
 **Ricardo Picatoste**
 
 ## Notes

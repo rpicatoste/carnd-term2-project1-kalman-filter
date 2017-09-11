@@ -10,7 +10,7 @@ KalmanFilter::~KalmanFilter() {}
 
 void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
                         MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) 
-						{
+{
 	x_ = x_in;
 	P_ = P_in;
 	F_ = F_in;
@@ -82,9 +82,9 @@ VectorXd KalmanFilter::ConvertCartesianToRadar(const VectorXd &cartesian)
 	radar_measurement(0) = sqrt( px*px + py*py );
 	radar_measurement(1) = atan2( py, px );
 	
-	if( abs(radar_measurement(0)) < 1.0e-6 ){
+	if( fabs(radar_measurement(0)) < 1.0e-6 ){
 		radar_measurement(2) = 0.0;
-		std::cout << "near zero division!\n";
+		std::cout << "ConvertCartesianToRadar: Near zero division (by " << radar_measurement(0) << ")! - x = " << cartesian.transpose() << std::endl;
 	}
 	else{
 		radar_measurement(2) = (px*vx + py*vy) / radar_measurement(0);		
@@ -140,8 +140,8 @@ MatrixXd KalmanFilter::CalculateJacobian(const VectorXd &state)
 	float c3 = (c1*c2);
 
 	//check division by zero
-	if(fabs(c1) < 1.0e-6){
-		std::cout << "CalculateJacobian () - Error - Division by Zero" << std::endl;
+	if(fabs(c2) < 1.0e-6){
+		std::cout << "CalculateJacobian: Near zero division! - x = " << this->x_.transpose() << std::endl;
 		return Hj; // Return without using the radar measurement.
 	}
 

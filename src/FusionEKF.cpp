@@ -64,6 +64,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack)
 		FirstMeasurement(measurement_pack);	
 		return;
 	}
+	else if (dt > 10.0){
+		std::cout << "WARNING: dt was above 10 seconds: " << dt << " sec. The Kalman filter is being initialized." << std::endl;
+		FirstMeasurement(measurement_pack);	
+		return;
+		
+	}
 	
 	float dt_2 = dt * dt;
 	float dt_3 = dt_2 * dt;
@@ -149,6 +155,10 @@ void FusionEKF::FirstMeasurement(const MeasurementPackage &measurement_pack)
 			0, 0, 0, 0,
 			0, 0, 0, 0,
 			0, 0, 0, 0;
+			
+	this->Hj_<< 0, 0, 0, 0,
+				0, 0, 0, 0,
+				0, 0, 0, 0;
 		
 	// Initialize state.
 	VectorXd x_in(4); 
